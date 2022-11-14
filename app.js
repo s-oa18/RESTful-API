@@ -25,6 +25,8 @@ const articleSchema = {
 
 const Article = mongoose.model("Article", articleSchema);
 
+//Request targetting all Articles
+
 app
   .route("/articles")
 
@@ -62,6 +64,7 @@ app
     });
   });
 
+//  Request targetting a specific Article
 app
   .route("/articles/:articleTitle")
 
@@ -73,6 +76,19 @@ app
           res.send(foundArticle);
         } else {
           res.send("No articles matching that title was found");
+        }
+      }
+    );
+  })
+
+  .put(function (req, res) {
+    Article.updateOne(
+      { title: req.params.articleTitle },
+      { title: req.body.title, content: req.body.content },
+      { overwrite: true },
+      function (err) {
+        if (!err) {
+          res.send("Successfully updated article.");
         }
       }
     );
